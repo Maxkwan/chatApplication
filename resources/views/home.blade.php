@@ -12,7 +12,7 @@
                                 <a href="{{ route('message.conversation', $user->id) }}">
 
                                     <div class="chat-image">
-                                        <i class="fa fa-circle user-status-icon" title="away"></i>
+                                    <i class="fa fa-circle user-status-icon user-icon-{{$user->id}}" title="away"></i>
                                     </div>
                                    
                                   
@@ -47,9 +47,24 @@
             let socket = io(ip_address + ':' + socket_port);
 
             socket.on('connect', function(){
-                alert("here");
                 socket.emit('user_connected', user_id)
             });
+
+            socket.on('updateUserStatus', (data) => {
+
+                console.log(data);
+
+                $.each(data, function(key, val){
+                    if(val !== null && val !== 0)
+                    {
+                        console.log(key);
+                        let $userIcon = $(".user-icon-" + key);
+                        $userIcon.addClass('text-success');
+                        $userIcon.attr('title', 'Online');
+                    }
+                })
+                
+            })
         });
     </script>
 
